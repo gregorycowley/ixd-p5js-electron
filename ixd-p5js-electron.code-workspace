@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../ixd-p5-player"
+		},
+		{
+			"path": "../p5js-electron-templates"
+		},
+		{
+			"path": "../p5js-touch-table"
+		},
+		{
+			"path": "../p5js-touch-table-alt"
+		}
+	],
+	"settings": {}
+}
