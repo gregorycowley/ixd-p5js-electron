@@ -1,22 +1,69 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello p5.js!</title>
-    <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
-    <!-- uncomment lines below to include extra p5 libraries -->
-    <!--<script language="javascript" src="libraries/p5.dom.js"></script>-->
-    <!--<script language="javascript" src="libraries/p5.sound.js"></script>-->
-    <script language="javascript" type="text/javascript" src="sketch.js"></script>
-    <!-- this line removes any default padding and style. you might only need one of these values set. -->
-    <style> body {padding: 0; margin: 0; background: #000000; overflow-x:hidden; overflow-y: hidden} </style>
-  </head>
-  <body>
+<html lang="en">
 
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Multi-Touch Tracker</title>
+        <script src="https://cdn.jsdelivr.net/npm/interactjs"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+            }
 
-  <script>
-    // You can also require other files to run in this process
-    require('../renderer.js')
-  </script>
+            #touch-area {
+                width: 100vw;
+                height: 80vh;
+                background-color: lightgray;
+                position: relative;
+                touch-action: none;
+            }
+
+            .touch-point {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                background: red;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h2>Multi-Touch Tracker (Interact.js + Electron)</h2>
+        <p>Use multiple fingers to touch inside the gray area.</p>
+        <div id="touch-area"></div>
+
+        <script>
+            const touchArea = document.getElementById('touch-area');
+            const touchPoints = {};
+
+            interact(touchArea).on('down move', (event) => {
+                for (let touch of event.touches || [event]) {
+                    if (!touchPoints[touch.identifier]) {
+                        let dot = document.createElement('div');
+                        dot.classList.add('touch-point');
+                        touchArea.appendChild(dot);
+                        touchPoints[touch.identifier] = dot;
+                    }
+                    touchPoints[touch.identifier].style.left = `${touch.pageX}px`;
+                    touchPoints[touch.identifier].style.top = `${touch.pageY}px`;
+                }
+            });
+
+            interact(touchArea).on('up cancel', (event) => {
+                for (let touch of event.touches || [event]) {
+                    if (touchPoints[touch.identifier]) {
+                        touchPoints[touch.identifier].remove();
+                        delete touchPoints[touch.identifier];
+                    }
+                }
+            });
+        </script>
+
+    </body>
+
 </html>
